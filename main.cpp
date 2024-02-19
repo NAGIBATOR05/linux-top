@@ -6,7 +6,7 @@
 int main(){
     BigInteger o1;
     BigInteger o2("-00000");
-    BigInteger o3(-123456);
+    BigInteger o3("123456");
     BigInteger o4(-123456);
     BigInteger o5(1234567810000000000);
     BigInteger o6("");
@@ -16,6 +16,6 @@ int main(){
     BigInteger o10("5325");
     std::string a;
     a = o8.toString();
-    std::cout << (o10 > 5) << std::endl;
+    std::cout << (o4 == o3.abs()) << std::endl;
     return 0;
 }

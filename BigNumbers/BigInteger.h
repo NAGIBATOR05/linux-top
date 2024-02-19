@@ -16,8 +16,8 @@ public:
     static const int kSystem = 1000000000;
 
     const BigInteger operator-() const;
+    const BigInteger abs() const;
 
-    Sign& signum() {return sign;}
     const Sign& signum() const {return sign;}
     const std::vector<int>& digits() const {return number;}
 
@@ -27,6 +27,11 @@ public:
     friend bool operator<=(SelfRefBigInt, SelfRefBigInt);
     friend bool operator>(SelfRefBigInt, SelfRefBigInt);
     friend bool operator>=(SelfRefBigInt, SelfRefBigInt);
+
+    BigInteger& operator+=(SelfRefBigInt);
+    BigInteger& operator-=(SelfRefBigInt);
+    BigInteger& operator*=(SelfRefBigInt);
+    BigInteger& operator/=(SelfRefBigInt);
 
     BigInteger(const long long& other);
     BigInteger(const std::string other);

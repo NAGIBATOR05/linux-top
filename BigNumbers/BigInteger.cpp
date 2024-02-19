@@ -128,3 +128,11 @@ bool operator>(SelfRefBigInt first, SelfRefBigInt second) {
 bool operator>=(SelfRefBigInt first, SelfRefBigInt second) {
     return !(first < second);
 }
+
+const BigInteger BigInteger::abs() const {
+    BigInteger copy = *this;
+    if (copy.sign == Sign::negative) {
+        copy.sign = Sign::positive;
+    }
+    return copy;
+}
