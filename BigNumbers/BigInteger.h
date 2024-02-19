@@ -20,8 +20,8 @@ public:
     BigInteger(const std::string other);
     BigInteger(){}
     ~BigInteger() = default;
-private:
     std::string toString() const;
+private:
     Sign sign = Sign::zero;
     std::vector<int> number;
 };
