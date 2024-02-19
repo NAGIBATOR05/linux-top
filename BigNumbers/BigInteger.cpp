@@ -1,4 +1,5 @@
 #include "BigInteger.h"
+using SelfRefBigInt = const BigInteger&;
 
 BigInteger::BigInteger(const long long& other) {
     if (other < 0) {
@@ -74,4 +75,56 @@ std::string BigInteger::toString() const {
         output_string = "-" + output_string;
     }
     return output_string;
+}
+
+bool operator==(SelfRefBigInt first, SelfRefBigInt second) {
+    if (first.signum() != second.signum() || first.digits().size() != second.digits().size()) {
+        return false;
+    }
+    for (size_t i = 0; i < first.digits().size(); i++) {
+        if (first.digits()[i] != second.digits()[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool operator<(SelfRefBigInt first, SelfRefBigInt second) {
+    if (first == second) {
+        return false;
+    }
+    if (first.signum() > second.signum()) {
+        return false;
+    } if (first.signum() < second.signum()) {
+        return true;
+    } if (first.signum() == Sign::negative) {
+        return -second < -first;
+    } if (first.digits().size() > second.digits().size()) {
+        return false;
+    } if (first.digits().size() < second.digits().size()) {
+        return true;
+    } for (size_t i = first.digits().size(); i > 0; i--) {
+        if (first.digits()[i - 1] > second.digits()[i - 1]) {
+            return false;
+        } if (first.digits()[i - 1] < second.digits()[i - 1]) {
+            return true;
+        }
+    }
+    return true;
+}
+
+bool operator!=(SelfRefBigInt first, SelfRefBigInt second) {
+    return !(first == second);
+}
+
+bool operator<=(SelfRefBigInt first, SelfRefBigInt second) {
+    return !(second < first);
+}
+
+bool operator>(SelfRefBigInt first, SelfRefBigInt second) {
+    return second < first;
+}
+
+bool operator>=(SelfRefBigInt first, SelfRefBigInt second) {
+    return !(first < second);
 }
