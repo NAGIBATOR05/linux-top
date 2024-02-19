@@ -9,20 +9,19 @@ enum class Sign {
     positive
 };
 
-Sign signum(const long long& integer) {
-    if (integer > 0) {
-        return Sign::positive;
-    }
-    if (integer == 0) {
-        return Sign::zero;
-    }
-    return Sign::negative;
-}
-
 class BigInteger {
 public:
-    //
+    static const size_t kDigit_size = 9;
+    static const int kSystem = 1000000000;
+
+    const BigInteger operator-() const;
+
+    BigInteger(const long long& other);
+    BigInteger(const std::string other);
+    BigInteger(){}
+    ~BigInteger() = default;
 private:
+    std::string toString() const;
     Sign sign = Sign::zero;
     std::vector<int> number;
 };

@@ -10,6 +10,5 @@ add_subdirectory(BigNumbers)
 
 target_link_libraries(linux-top PUBLIC BigNumbers)
 
-target_include_directories(linux-top PUBLIC
-        "${PROJECT_BINARY_DIR}"
+target_include_directories(linux-top PUBLIC        "${PROJECT_BINARY_DIR}"
 )
