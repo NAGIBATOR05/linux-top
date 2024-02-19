@@ -136,3 +136,204 @@ const BigInteger BigInteger::abs() const {
     }
     return copy;
 }
+BigInteger BigInteger::abs() {
+    BigInteger copy = *this;
+    if (copy.sign == Sign::negative) {
+        copy.sign = Sign::positive;
+    }
+    return copy;
+}
+
+void BigInteger::remove_zeros() {
+    while (!number.empty() && number.back() == 0) {
+        number.pop_back();
+    } if (number.empty()) {
+        sign = Sign::zero;
+    }
+}
+
+void BigInteger::shift() {
+    if (number.empty()) {
+        number.push_back(0);
+        return;
+    }
+    number.push_back(number[number.size() - 1]);
+    for (size_t i = number.size() - 2; i > 0; i--) {
+        number[i] = number[i - 1];
+    }
+    number[0] = 0;
+}
+
+BigInteger& BigInteger::operator+=(SelfRefBigInt other) {
+    if (sign == Sign::zero) {
+        *this = other;
+        return *this;
+    } if (other.sign == Sign::zero) {
+        return *this;
+    } if (sign == Sign::positive && other.sign == Sign::positive) {
+        int memory = 0;
+        for (size_t i = 0; i < std::max(number.size(), other.number.size()) || memory != 0; i++) {
+            if (i == number.size()) {
+                number.push_back(0);
+            }
+            int second = 0;
+            if (i < other.number.size()) {
+                second = other.number[i];
+            }
+            number[i] += memory + second;
+            memory = number[i] >= kSystem;
+            if (memory != 0) {
+                number[i] -= kSystem;
+            }
+        }
+        return *this;
+    } if (sign == Sign::negative && other.sign == Sign::negative) {
+        *this = -(abs() += other.abs());
+        return *this;
+    } if (sign == Sign::positive && other.sign == Sign::negative) {
+        *this -= -other;
+        return *this;
+    }
+    *this = -*this;
+    *this = -(*this -= other);
+    return *this;
+}
+
+BigInteger& BigInteger::operator-=(SelfRefBigInt other) {
+    if (sign == Sign::zero) {
+        *this = -other;
+        return *this;
+    } if (other.sign == Sign::zero) {
+        return *this;
+    }
+    if (sign == Sign::positive && other.sign == Sign::positive) {
+        if (*this < other) {
+            BigInteger copy = other;
+            copy -= *this;
+            *this = -copy;
+            return *this;
+        }
+        if (*this == other) {
+            sign = Sign::zero;
+        }
+        int memory = 0;
+        for (size_t i = 0; i < number.size() || memory != 0; i++) {
+            int second = 0;
+            if (i < other.number.size()) {
+                second = other.number[i];
+            }
+            number[i] -= memory + second;
+            memory = number[i] < 0;
+            if (memory != 0) {
+                number[i] += kSystem;
+            }
+        }
+        remove_zeros();
+        return *this;
+    } if (other.sign == Sign::negative) {
+        *this += -other;
+        return *this;
+    }
+    *this = -*this;
+    *this += other;
+    *this = -*this;
+    return *this;
+}
+
+BigInteger& BigInteger::operator*=(SelfRefBigInt other) {
+    BigInteger product;
+    if (sign == Sign::zero || other.sign == Sign::zero) {
+        sign = Sign::zero;
+        return *this;
+    }
+    if (sign == other.sign) {
+        product.sign = Sign::positive;
+    } else {
+        product.sign = Sign::negative;
+    }
+    product.number.resize(number.size() + other.number.size());
+    for (size_t i = 0; i < number.size(); i++) {
+        int memory = 0;
+        for (size_t j = 0; j < other.number.size() || memory != 0; j++) {
+            int digit = 0;
+            if (j < other.number.size()) {
+                digit = other.number[j];
+            }
+            long long current_product = product.number[i + j] + static_cast<long long>(number[i]) * digit + memory;
+            product.number[i + j] = current_product % kSystem;
+            memory = current_product / kSystem;
+        }
+    }
+    product.remove_zeros();
+    *this = product;
+    return *this;
+}
+
+BigInteger& BigInteger::operator/=(SelfRefBigInt other) {
+    if (other.sign == Sign::zero){
+        std::cout << "lol" << std::endl;
+        exit(0);
+    };
+    BigInteger quotient;
+    if (sign == Sign::zero) {
+        return *this;
+    }
+    if (sign == other.sign) {
+        quotient.sign = Sign::positive;
+    } else {
+        quotient.sign = Sign::negative;
+    }
+    quotient.number.resize(number.size());
+    BigInteger current;
+    for (size_t i = number.size(); i > 0; i--) {
+        current.shift();
+        current.number[0] = number[i - 1];
+        current.remove_zeros();
+        if (current.number[current.number.size() - 1] != 0) {
+            current.sign = Sign::positive;
+        } else {
+            current.sign = Sign::zero;
+        }
+        int incomplete_quotient = 0;
+        int left = 0;
+        int right = kSystem;
+        while (left <= right) {
+            int median = (left + right) / 2;
+            if (other.abs() * median <= current) {
+                incomplete_quotient = median;
+                left = median + 1;
+            } else {
+                right = median - 1;
+            }
+        }
+        quotient.number[i - 1] = incomplete_quotient;
+        current -= incomplete_quotient * other.abs();
+    }
+    quotient.remove_zeros();
+    *this = quotient;
+    return *this;
+}
+
+const BigInteger operator+(SelfRefBigInt first, SelfRefBigInt second) {
+    BigInteger sum = first;
+    sum += second;
+    return sum;
+}
+
+const BigInteger operator-(SelfRefBigInt first, SelfRefBigInt second) {
+    BigInteger difference = first;
+    difference -= second;
+    return difference;
+}
+
+const BigInteger operator*(SelfRefBigInt first, SelfRefBigInt second) {
+    BigInteger product = first;
+    product *= second;
+    return product;
+}
+
+const BigInteger operator/(SelfRefBigInt first, SelfRefBigInt second) {
+    BigInteger quotient = first;
+    quotient /= second;
+    return quotient;
+}

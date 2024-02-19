@@ -16,10 +16,14 @@ public:
     static const int kSystem = 1000000000;
 
     const BigInteger operator-() const;
-    const BigInteger abs() const;
 
+    const BigInteger abs() const;
+    BigInteger abs();
     const Sign& signum() const {return sign;}
     const std::vector<int>& digits() const {return number;}
+
+    void remove_zeros();
+    void shift();
 
     friend bool operator!=(SelfRefBigInt, SelfRefBigInt);
     friend bool operator==(SelfRefBigInt, SelfRefBigInt);
@@ -32,6 +36,11 @@ public:
     BigInteger& operator-=(SelfRefBigInt);
     BigInteger& operator*=(SelfRefBigInt);
     BigInteger& operator/=(SelfRefBigInt);
+
+    friend const BigInteger operator+(SelfRefBigInt, SelfRefBigInt);
+    friend const BigInteger operator-(SelfRefBigInt, SelfRefBigInt);
+    friend const BigInteger operator*(SelfRefBigInt, SelfRefBigInt);
+    friend const BigInteger operator/(SelfRefBigInt, SelfRefBigInt);
 
     BigInteger(const long long& other);
     BigInteger(const std::string other);
