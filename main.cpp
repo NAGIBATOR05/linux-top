@@ -5,9 +5,12 @@
 #include "BigNumbers/BigFloat.cpp"
 
 int main(){
-    BigFloat r1("-00000000000034768.010");
-    BigFloat r2("000034768.0000000000000000000000000000000000000000000000000000000000000000000000000001");
-    r1.change_precision(10);
-    std::cout << ((-r1) > r2);
+    BigFloat r1("0.0123");
+    BigFloat r2("10000");
+    BigFloat r3("2131231");
+    r1/=r2;
+    std::string t;
+    t = r1.toString();
+    std::cout << t;
     return 0;
 }

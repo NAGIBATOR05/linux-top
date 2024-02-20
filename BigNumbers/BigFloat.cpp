@@ -103,7 +103,6 @@ std::string BigFloat::toString() const {
     for (size_t i = index; i > 0 ; i--) {
         for (size_t j = 0; j < 9; j++) {
             int len = std::to_string(numberF.number[i - 1]).size();
-            std::cout << numberF.number[0] << std::endl;
             if ((9 - len) > j) {
                 output_string.push_back('0');
             }else {
@@ -220,4 +219,44 @@ bool operator>(SelfRefBigFloat first, SelfRefBigFloat second) {
 
 bool operator>=(SelfRefBigFloat first, SelfRefBigFloat second) {
     return !(first < second);
+}
+
+BigFloat& BigFloat::operator+=(SelfRefBigFloat other) {
+    BigFloat temp = other;
+    if(temp.index > index){
+        this -> change_precision(other.index);
+    }else{
+        temp.change_precision(index);
+    }
+    numberF += temp.numberF;
+    return *this;
+}
+
+BigFloat& BigFloat::operator-=(SelfRefBigFloat other) {
+    BigFloat temp = other;
+    if(temp.index > index){
+        this -> change_precision(other.index);
+    }else{
+        temp.change_precision(index);
+    }
+    numberF -= temp.numberF;
+    return *this;
+}
+
+BigFloat& BigFloat::operator*=(SelfRefBigFloat other) {
+    BigFloat temp = other;
+    numberF *= temp.numberF;
+    index += temp.index;
+    for(int i = temp.index; i > 0; i--){
+        numberF.number.push_back(0);
+    }
+    return *this;
+}
+
+BigFloat& BigFloat::operator/=(SelfRefBigFloat other){
+    BigFloat temp = other;
+    this ->change_precision(100);
+    numberF /= other.numberF;
+    index -= other.index;
+    return *this;
 }
