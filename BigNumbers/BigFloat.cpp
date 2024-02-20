@@ -260,3 +260,27 @@ BigFloat& BigFloat::operator/=(SelfRefBigFloat other){
     index -= other.index;
     return *this;
 }
+
+const BigFloat operator+(SelfRefBigFloat first, SelfRefBigFloat second) {
+    BigFloat sum = first;
+    sum += second;
+    return sum;
+}
+
+const BigFloat operator-(SelfRefBigFloat first, SelfRefBigFloat second) {
+    BigFloat difference = first;
+    difference -= second;
+    return difference;
+}
+
+const BigFloat operator*(SelfRefBigFloat first, SelfRefBigFloat second) {
+    BigFloat product = first;
+    product *= second;
+    return product;
+}
+
+const BigFloat operator/(SelfRefBigFloat first, SelfRefBigFloat second) {
+    BigFloat quotient = first;
+    quotient /= second;
+    return quotient;
+}
