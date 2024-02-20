@@ -5,9 +5,8 @@
 #include "BigNumbers/BigFloat.cpp"
 
 int main(){
-    BigFloat r("0032132300000123456789.010203040506070809123456789");
-    std::string t;
-    t = r.toString();
-    std::cout << t;
+    BigFloat r("-034768.010203040506070809123456789");
+    r.change_precision(10);
+    std::cout << (-r).toString();
     return 0;
 }

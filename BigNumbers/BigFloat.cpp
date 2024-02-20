@@ -89,6 +89,9 @@ std::string BigFloat::toString() const {
         return "0";
     }
     std::string output_string;
+    if(numberF.number.size() == index){
+        output_string += '0';
+    }
     for (size_t i = numberF.number.size(); i > index ; i--) {
         for (size_t j = 0; j < std::to_string(numberF.number[i - 1]).size(); j++) {
             output_string.push_back(std::to_string(numberF.number[i - 1])[j]);
@@ -113,3 +116,26 @@ std::string BigFloat::toString() const {
     }
     return output_string;
 }
+
+void BigFloat::change_precision(int x) {
+    if(index >= x){
+        return;
+    }
+    else{
+        for(int i = x-index; i > 0; i--){
+            numberF.number.insert(numberF.number.begin(), 0);
+        }
+        index = x;
+    }
+}
+
+const BigFloat BigFloat::operator-() const {
+    BigFloat result = *this;
+    if (result.numberF.sign == Sign::positive) {
+        result.numberF.sign = Sign::negative;
+    } else if (numberF.sign == Sign::negative) {
+        result.numberF.sign = Sign::positive;
+    }
+    return result;
+}
+
