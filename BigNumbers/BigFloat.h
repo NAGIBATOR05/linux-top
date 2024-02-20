@@ -33,6 +33,7 @@ public:
     BigFloat(const BigInteger& num);
     BigFloat(){};
     ~BigFloat() = default;
+    std::string toString() const;
 private:
     void delete_leadings_zeroes();
     BigInteger numberF;
