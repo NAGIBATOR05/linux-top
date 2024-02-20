@@ -35,10 +35,11 @@ public:
     ~BigFloat() = default;
     std::string toString() const;
     void change_precision(int x);
-private:
-    void delete_leadings_zeroes();
+    int zeroes_of_head(SelfRefBigFloat x);
     BigInteger numberF;
     int index;
+private:
+    void delete_leadings_zeroes();
 };
 
 #endif

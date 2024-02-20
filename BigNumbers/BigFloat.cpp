@@ -139,3 +139,85 @@ const BigFloat BigFloat::operator-() const {
     return result;
 }
 
+int zeroes_of_head(SelfRefBigFloat x){
+    int x_digits = x.numberF.number.size();
+    for(int i = 0; i < x.index; i++){
+        if(x.numberF.number[i] == 0){
+            x_digits--;
+        }else{
+            return x_digits;
+        }
+    }
+    return x_digits;
+};
+
+bool operator==(SelfRefBigFloat first, SelfRefBigFloat second) {
+    int first_digits = first.numberF.number.size();
+    int size_first = zeroes_of_head(first);
+    int second_digits = second.numberF.number.size();
+    int size_second = zeroes_of_head(second);
+    if (first.numberF.sign != second.numberF.sign || size_first != size_second ||
+    first.index - (first_digits - size_first) != second.index - (second_digits - size_second)) {
+        return false;
+    }
+    for (size_t i = 0; i < size_second; i++) {
+        if (first.numberF.number[(first_digits - size_first) + i] != second.numberF.number[(second_digits - size_second)+i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool operator<(SelfRefBigFloat first, SelfRefBigFloat second) {
+    if (first == second) {
+        return false;
+    }
+    if (first.numberF.sign > second.numberF.sign) {
+        return false;
+    }
+    if (first.numberF.sign < second.numberF.sign) {
+        return true;
+    }
+    if (first.numberF.sign == Sign::negative) {
+        return -second < -first;
+    }
+    int first_digits = first.numberF.number.size();
+    int size_first = zeroes_of_head(first);
+    int second_digits = second.numberF.number.size();
+    int size_second = zeroes_of_head(second);
+    if (first_digits - first.index > second_digits - second.index) {
+        return false;
+    }
+    if (first_digits - first.index < second_digits - second.index) {
+        return true;
+    }
+    for (size_t i = 0; i < std::min(first_digits, second_digits + first_digits - first.index); i++) {
+        if (first.numberF.number[first_digits - i - 1] > second.numberF.number[second_digits - i - 1]) {
+            return false;
+        }if (first.numberF.number[first_digits - i - 1] < second.numberF.number[second_digits - i - 1]) {
+            return true;
+        }
+    }
+    if(size_first > size_second) {
+        return false;
+    }if(size_first < size_second){
+        return true;
+    }
+    return true;
+}
+
+bool operator!=(SelfRefBigFloat first, SelfRefBigFloat second) {
+    return !(first == second);
+}
+
+bool operator<=(SelfRefBigFloat first, SelfRefBigFloat second) {
+    return !(second < first);
+}
+
+bool operator>(SelfRefBigFloat first, SelfRefBigFloat second) {
+    return second < first;
+}
+
+bool operator>=(SelfRefBigFloat first, SelfRefBigFloat second) {
+    return !(first < second);
+}

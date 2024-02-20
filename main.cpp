@@ -5,8 +5,9 @@
 #include "BigNumbers/BigFloat.cpp"
 
 int main(){
-    BigFloat r("-034768.010203040506070809123456789");
-    r.change_precision(10);
-    std::cout << (-r).toString();
+    BigFloat r1("-00000000000034768.010");
+    BigFloat r2("000034768.0000000000000000000000000000000000000000000000000000000000000000000000000001");
+    r1.change_precision(10);
+    std::cout << ((-r1) > r2);
     return 0;
 }
