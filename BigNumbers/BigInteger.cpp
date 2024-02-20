@@ -1,4 +1,5 @@
 #include "BigInteger.h"
+
 using SelfRefBigInt = const BigInteger&;
 
 BigInteger::BigInteger(const long long& other) {
@@ -118,7 +119,7 @@ bool operator!=(SelfRefBigInt first, SelfRefBigInt second) {
 }
 
 bool operator<=(SelfRefBigInt first, SelfRefBigInt second) {
-    return !(second < first);
+    return !(second > first);
 }
 
 bool operator>(SelfRefBigInt first, SelfRefBigInt second) {
