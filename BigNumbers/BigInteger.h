@@ -37,6 +37,8 @@ public:
     BigInteger(){}
     ~BigInteger() = default;
     std::string toString() const;
+    Sign sign = Sign::zero;
+    std::vector<int> number;
 private:
     const BigInteger abs() const;
     BigInteger abs();
@@ -46,8 +48,6 @@ private:
     void shift();
     static const size_t kDigit_size = 9;
     static const int kSystem = 1000000000;
-    Sign sign = Sign::zero;
-    std::vector<int> number;
 };
 
 #endif

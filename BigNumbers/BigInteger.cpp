@@ -119,7 +119,7 @@ bool operator!=(SelfRefBigInt first, SelfRefBigInt second) {
 }
 
 bool operator<=(SelfRefBigInt first, SelfRefBigInt second) {
-    return !(second > first);
+    return !(second < first);
 }
 
 bool operator>(SelfRefBigInt first, SelfRefBigInt second) {
