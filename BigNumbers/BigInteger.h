@@ -37,11 +37,10 @@ public:
     BigInteger(){}
     ~BigInteger() = default;
     std::string toString() const;
-    Sign sign = Sign::zero;
+    Sign sign;
     std::vector<int> number;
 private:
-    const BigInteger abs() const;
-    BigInteger abs();
+    BigInteger abs() const;
     const Sign& signum() const {return sign;}
     const std::vector<int>& digits() const {return number;}
     void remove_zeros();

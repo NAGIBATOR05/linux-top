@@ -2,15 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#define all(x) x.begin(), x.end()
 
 using SelfRefBigFloat = const BigFloat&;
 
-std::vector<int> BigFloat::get_val() {
-    std::vector<int> str = numberF.number;
-    std::reverse(all(str));
-    return str;
-}
 BigFloat::BigFloat(const BigInteger &num) {
     for (int i = 0; i < num.number.size(); ++i) {
         numberF.number.push_back(num.number[i]);
@@ -22,6 +16,7 @@ BigFloat::BigFloat(const BigInteger &num) {
 BigFloat::BigFloat(std::string s) {
     if (s.size() == 1 && s[0] == '0') {
         BigFloat::numberF.sign = Sign::zero;
+        index = 0;
         return;
     }
     BigFloat::index = 0;
@@ -65,26 +60,29 @@ BigFloat::BigFloat(std::string s) {
     if(current.size()!= 0) {
         numberF.number.push_back(stoi(current));
     }
+    if(index == numberF.number.size()){
+        numberF.number.push_back(0);
+    }
     BigFloat::delete_leadings_zeroes();
 }
 
 void BigFloat::delete_leadings_zeroes() {
-    if (BigFloat::numberF.sign == Sign::zero) {
+    if (numberF.sign == Sign::zero) {
         return;
     }
-    std::vector<int> v = BigFloat::numberF.number;
+    std::vector<int> v = numberF.number;
     int cnt = 0;
-    while (BigFloat::index > 0 && BigFloat::numberF.number[cnt] == '0') {
-        --BigFloat::index;
+    while (index > 0 && numberF.number[0] == 0) {
         ++cnt;
+        --index;
+        numberF.number.erase(numberF.number.begin());
     }
-    BigFloat::numberF.number.clear();
-    for (int i = cnt; i < v.size(); ++i) {
-        BigFloat::numberF.number.push_back(v[i]);
+    while(numberF.number[numberF.number.size()-1] == 0 && numberF.number.size() - 1>index){
+        numberF.number.pop_back();
     }
 }
 
-std::string BigFloat::toString(int x) const {
+std::string BigFloat::toString() const {
     if (numberF.sign == Sign::zero) {
         return "0";
     }
@@ -92,15 +90,10 @@ std::string BigFloat::toString(int x) const {
     if(numberF.number.size() == index){
         output_string += '0';
     }
-    for (size_t i = numberF.number.size(); i > index ; i--) {
-        for (size_t j = 0; j < std::to_string(numberF.number[i - 1]).size(); j++) {
-            output_string.push_back(std::to_string(numberF.number[i - 1])[j]);
+    for (size_t i = numberF.number.size(); i > 0; i--) {
+        if(i == index) {
+            output_string += '.';
         }
-    }
-    if(index > 0 && x != 0){
-        output_string += '.';
-    }
-    for (int i = index; i > index - x && i > 0 ; i--) {
         for (int j = 0; j < 9; j++) {
             int len = std::to_string(numberF.number[i - 1]).size();
             if ((9 - len) > j) {
@@ -229,6 +222,7 @@ BigFloat& BigFloat::operator+=(SelfRefBigFloat other) {
         temp.change_precision(index);
     }
     numberF += temp.numberF;
+    delete_leadings_zeroes();
     return *this;
 }
 
@@ -240,6 +234,7 @@ BigFloat& BigFloat::operator-=(SelfRefBigFloat other) {
         temp.change_precision(index);
     }
     numberF -= temp.numberF;
+    delete_leadings_zeroes();
     return *this;
 }
 
@@ -247,35 +242,55 @@ BigFloat& BigFloat::operator*=(SelfRefBigFloat other) {
     BigFloat temp = other;
     numberF *= temp.numberF;
     index += temp.index;
-    for(int i = temp.index; i > 0; i--){
+    for(int i = numberF.number.size(); i <= index; i++){
         numberF.number.push_back(0);
     }
+    delete_leadings_zeroes();
     return *this;
 }
 
 BigFloat& BigFloat::operator/=(SelfRefBigFloat other){
     BigFloat temp = other;
-    this ->change_precision(100);
+    this ->change_precision(150);
     numberF /= other.numberF;
-    index -= other.index;
+    if(numberF.number.size() <= index){
+        for(int i = index - numberF.number.size(); i >= 0; i--){
+            numberF.number.push_back(0);
+        }
+    }
     return *this;
 }
 
 const BigFloat operator+(SelfRefBigFloat first, SelfRefBigFloat second) {
     BigFloat sum = first;
     sum += second;
+    if(sum.numberF.number.size() <= sum.index){
+        for(int i = sum.index - sum.numberF.number.size(); i >= 0; i--){
+            sum.numberF.number.push_back(0);
+        }
+    }
     return sum;
 }
 
 const BigFloat operator-(SelfRefBigFloat first, SelfRefBigFloat second) {
     BigFloat difference = first;
     difference -= second;
+    if(difference.numberF.number.size() <= difference.index){
+        for(int i = difference.index - difference.numberF.number.size(); i >= 0; i--){
+            difference.numberF.number.push_back(0);
+        }
+    }
     return difference;
 }
 
 const BigFloat operator*(SelfRefBigFloat first, SelfRefBigFloat second) {
     BigFloat product = first;
     product *= second;
+    if(product.numberF.number.size() <= product.index){
+        for(int i = product.index - product.numberF.number.size(); i >= 0; i--){
+            product.numberF.number.push_back(0);
+        }
+    }
     return product;
 }
 

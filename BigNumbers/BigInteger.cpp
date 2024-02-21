@@ -46,7 +46,9 @@ BigInteger::BigInteger(const std::string other) {
             current = "";
         }
     }
-    number.push_back(stoi(current));
+    if(current.size() != 0) {
+        number.push_back(stoi(current));
+    }
 }
 
 const BigInteger BigInteger::operator-() const {
@@ -130,14 +132,7 @@ bool operator>=(SelfRefBigInt first, SelfRefBigInt second) {
     return !(first < second);
 }
 
-const BigInteger BigInteger::abs() const {
-    BigInteger copy = *this;
-    if (copy.sign == Sign::negative) {
-        copy.sign = Sign::positive;
-    }
-    return copy;
-}
-BigInteger BigInteger::abs() {
+BigInteger BigInteger::abs() const {
     BigInteger copy = *this;
     if (copy.sign == Sign::negative) {
         copy.sign = Sign::positive;
