@@ -84,7 +84,7 @@ void BigFloat::delete_leadings_zeroes() {
     }
 }
 
-std::string BigFloat::toString() const {
+std::string BigFloat::toString(int x) const {
     if (numberF.sign == Sign::zero) {
         return "0";
     }
@@ -97,11 +97,11 @@ std::string BigFloat::toString() const {
             output_string.push_back(std::to_string(numberF.number[i - 1])[j]);
         }
     }
-    if(index > 0){
+    if(index > 0 && x != 0){
         output_string += '.';
     }
-    for (size_t i = index; i > 0 ; i--) {
-        for (size_t j = 0; j < 9; j++) {
+    for (int i = index; i > index - x && i > 0 ; i--) {
+        for (int j = 0; j < 9; j++) {
             int len = std::to_string(numberF.number[i - 1]).size();
             if ((9 - len) > j) {
                 output_string.push_back('0');

@@ -33,7 +33,7 @@ public:
     BigFloat(const BigInteger& num);
     BigFloat(){};
     ~BigFloat() = default;
-    std::string toString() const;
+    std::string toString(int x) const;
     void change_precision(int x);
     int zeroes_of_head(SelfRefBigFloat x);
     BigInteger numberF;
