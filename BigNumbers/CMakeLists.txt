@@ -7,12 +7,12 @@ set(This BigNumbers)
 
 set(Sources
         BigFloat.cpp
-        arithmetics.cpp
+        BigInteger.cpp
 
 )
 set(Headers
-        BigFloat.cpp
-        arithmetics.hpp
+        BigFloat.h
+        BigInteger.h
 )
 
 add_library(${This} SHARED

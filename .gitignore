@@ -2,3 +2,9 @@ main
 build/
 .idea/
 cmake-build-debug/
+.cmake/
+_deps/
+CMakeFiles/
+lib/
+googletest/
+Project
