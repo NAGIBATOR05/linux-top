@@ -33,12 +33,12 @@ public:
     BigFloat(){};
     ~BigFloat() = default;
     std::string toString(int x) const;
-    void change_precision(int x);
-    int zeroes_of_head(SelfRefBigFloat x);
     BigInteger numberF;
     int index;
-    void delete_leadings_zeroes();
 private:
+    void change_precision(int x);
+    void delete_leadings_zeroes();
+    int zeroes_of_head(SelfRefBigFloat x);
 };
 const BigFloat operator ""_bf(const char *s, size_t size);
 

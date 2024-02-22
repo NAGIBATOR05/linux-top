@@ -28,13 +28,3 @@ target_link_libraries(${This} PUBLIC
 target_include_directories(${This} PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
-
-add_custom_target(run_tests
-        COMMAND tests
-        DEPENDS tests
-        COMMENT "Running tests"
-)
-
-add_dependencies(${This}
-        run_tests
-)

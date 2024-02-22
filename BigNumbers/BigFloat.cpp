@@ -92,11 +92,11 @@ std::string BigFloat::toString(int x) const {
     }
     int count = 0;
     std::string output_string;
-    for (int j = 0; j < std::to_string(numberF.number[numberF.number.size()]).size(); j++) {
+    for (int j = 0; j < std::to_string(numberF.number[numberF.number.size()-1]).size(); j++) {
         output_string.push_back(std::to_string(numberF.number[numberF.number.size()-1])[j]);
     }
     for (size_t i = numberF.number.size() - 1; i > 0; i--) {
-        if(i == index) {
+        if(i == index && x != 0) {
             output_string += '.';
         }
         for (int j = 0; j < 9; j++) {
@@ -264,6 +264,7 @@ BigFloat& BigFloat::operator/=(SelfRefBigFloat other){
     BigFloat temp = other;
     this ->change_precision(120);
     numberF /= other.numberF;
+    index -= temp.index;
     if(numberF.number.size() <= index){
         for(int i = index - numberF.number.size(); i >= 0; i--){
             numberF.number.push_back(0);
