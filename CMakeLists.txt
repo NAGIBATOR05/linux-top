@@ -1,14 +1,40 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.20)
 project(linux-top)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(This Project)
 
-add_executable(linux-top main.cpp)
+option(BUILD_GMOCK "Add GMock for testing" OFF)
 
-add_subdirectory(BigNumbers)
+set(Sources
+        main.cpp
+)
 
-target_link_libraries(linux-top PUBLIC BigNumbers)
+add_subdirectory(
+        ${CMAKE_CURRENT_SOURCE_DIR}/BigNumbers
+)
 
-target_include_directories(linux-top PUBLIC        "${PROJECT_BINARY_DIR}"
+add_subdirectory(tests)
+
+add_executable(${This}
+        ${Sources}
+        ${Headers}
+)
+
+target_link_libraries(${This} PUBLIC
+        BigNumbers
+)
+target_include_directories(${This} PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_custom_target(run_tests
+        COMMAND tests
+        DEPENDS tests
+        COMMENT "Running tests"
+)
+
+add_dependencies(${This}
+        run_tests
 )

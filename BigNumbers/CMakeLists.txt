@@ -1,5 +1,21 @@
-add_library(BigNumbers BigInteger.cpp BigFloat.cpp)
+cmake_minimum_required(VERSION 3.20)
+project(linux-top)
 
-target_include_directories(BigNumbers
-        INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(This BigNumbers)
+
+set(Sources
+        BigFloat.cpp
+        arithmetics.cpp
+
+)
+set(Headers
+        BigFloat.cpp
+        arithmetics.hpp
+)
+
+add_library(${This} SHARED
+        ${Sources}
+        ${Headers}
 )

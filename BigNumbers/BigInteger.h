@@ -1,5 +1,6 @@
 #ifndef LINUX_TOP_BIGINTEGER_H
 #define LINUX_TOP_BIGINTEGER_H
+#pragma once
 #include <iostream>
 #include <vector>
 
@@ -39,6 +40,7 @@ public:
     std::string toString() const;
     Sign sign;
     std::vector<int> number;
+
 private:
     BigInteger abs() const;
     const Sign& signum() const {return sign;}

@@ -1,9 +1,13 @@
 #include "BigFloat.h"
+#include "BigInteger.h"
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using SelfRefBigFloat = const BigFloat&;
+
+const BigFloat operator ""_bf(const char *s, size_t size) {
+    return BigFloat(std::string(s, size));
+}
 
 BigFloat::BigFloat(const BigInteger &num) {
     for (int i = 0; i < num.number.size(); ++i) {
@@ -82,19 +86,26 @@ void BigFloat::delete_leadings_zeroes() {
     }
 }
 
-std::string BigFloat::toString() const {
+std::string BigFloat::toString(int x) const {
     if (numberF.sign == Sign::zero) {
         return "0";
     }
+    int count = 0;
     std::string output_string;
-    if(numberF.number.size() == index){
-        output_string += '0';
+    for (int j = 0; j < std::to_string(numberF.number[numberF.number.size()]).size(); j++) {
+        output_string.push_back(std::to_string(numberF.number[numberF.number.size()-1])[j]);
     }
-    for (size_t i = numberF.number.size(); i > 0; i--) {
+    for (size_t i = numberF.number.size() - 1; i > 0; i--) {
         if(i == index) {
             output_string += '.';
         }
         for (int j = 0; j < 9; j++) {
+            if(count == x){
+                return output_string;
+            }
+            if(i - 1 < index){
+                count++;
+            }
             int len = std::to_string(numberF.number[i - 1]).size();
             if ((9 - len) > j) {
                 output_string.push_back('0');
@@ -251,7 +262,7 @@ BigFloat& BigFloat::operator*=(SelfRefBigFloat other) {
 
 BigFloat& BigFloat::operator/=(SelfRefBigFloat other){
     BigFloat temp = other;
-    this ->change_precision(150);
+    this ->change_precision(120);
     numberF /= other.numberF;
     if(numberF.number.size() <= index){
         for(int i = index - numberF.number.size(); i >= 0; i--){

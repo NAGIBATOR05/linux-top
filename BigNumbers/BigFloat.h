@@ -1,5 +1,6 @@
 #ifndef LINUX_TOP_BIGFLOAT_H
 #define LINUX_TOP_BIGFLOAT_H
+#pragma once
 #include "BigInteger.h"
 #include <iostream>
 #include <vector>
@@ -31,7 +32,7 @@ public:
     BigFloat(const BigInteger& num);
     BigFloat(){};
     ~BigFloat() = default;
-    std::string toString() const;
+    std::string toString(int x) const;
     void change_precision(int x);
     int zeroes_of_head(SelfRefBigFloat x);
     BigInteger numberF;
@@ -39,5 +40,6 @@ public:
     void delete_leadings_zeroes();
 private:
 };
+const BigFloat operator ""_bf(const char *s, size_t size);
 
 #endif
